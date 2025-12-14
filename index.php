@@ -11,32 +11,29 @@ require __DIR__ . '/views/header.php';
 ?>
 
 <main>
-    <form class="bookingForm" action="" method="post">
-        <label for="">Name</label>
-        <input type="text">
+    <form class="bookingForm" action="app/booking.php" method="post">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name">
 
-        <label for="">Transfer code</label>
-        <input type="text">
+        <label for="transferCode">Transfer code</label>
+        <input type="text" id="transferCode" name="transferCode">
 
-        <label for="">Arrival</label>
-        <input type="date">
+        <label for="arrival">Arrival</label>
+        <input type="date" id="arrival" name="arrival">
 
-        <label for="">Departure</label>
-        <input type="date">
+        <label for="departure">Departure</label>
+        <input type="date" id="departure" name="departure">
        
-        <label>Room type</label>
-        <select>
+        <label for="roomType">Room type</label>
+        <select id="roomType" name="roomType">
             <option value="economy">Economy</option>
             <option value="standard">Standard</option>
             <option value="luxury">Luxury</option>
         </select>
         <input type="submit" value="Submit">
         
-
-
-
     </form>
-    <label for=""></label>
+    
 </main>
 <?php
 require __DIR__ . '/views/footer.php';
