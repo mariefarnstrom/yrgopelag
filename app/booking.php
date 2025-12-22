@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-$database = new PDO('sqlite:' . __DIR__ . '/../hotel.db');
+require __DIR__ . '/autoload.php';
+
+// $database = new PDO('sqlite:' . __DIR__ . '/../hotel.db');
 $errors = [];
 
 if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['departure'], $_POST['roomType'])) {
@@ -18,7 +20,7 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
     if($transferCode === "") {
         $errors[] = "Please enter a valid transfer code!";
     } else {
-        // vlidate transfer code
+        // validate transfer code
         
     }
 
@@ -42,7 +44,6 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
         $roomNumber = $availabilityCheck->fetch(PDO::FETCH_ASSOC);
         if($roomNumber) {
         $roomNumber = $roomNumber['room_number'];
-        var_dump($roomNumber);
 
         // insert into database if the booking is accepted
         $statement = $database->prepare('INSERT INTO bookings (name, room_number, arrival, departure) VALUES (:name, :roomNumber, :arrival, :departure)');

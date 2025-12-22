@@ -1,11 +1,16 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+// require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/app/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
 
-$apiKey = $_ENV['API_KEY'] ?? null;
+// $apiKey = $_ENV['API_KEY'] ?? null;
+
+$getFeatures= $database->prepare('SELECT * FROM features WHERE active = 1;');
+$getFeatures->execute();
+$features= $getFeatures->fetchAll(PDO::FETCH_ASSOC);
+
 
 require __DIR__ . '/views/header.php';
 ?>
@@ -30,6 +35,14 @@ require __DIR__ . '/views/header.php';
             <option value="standard">Standard</option>
             <option value="luxury">Luxury</option>
         </select>
+
+        <label for="features"></label>
+        <?php foreach ($features as $feature) {
+            ?><label><input type="checkbox" id="<?=$feature['feature']?>" name="<?=$feature['feature']?>"><?= $feature['feature'] . " (" . $feature['rank'] . ", $" . $feature['price'] . ")" ?></label>
+
+            <?php
+        }
+        ?>
         <input type="submit" value="Submit">
         
     </form>
