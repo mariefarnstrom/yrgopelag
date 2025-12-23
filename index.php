@@ -7,9 +7,10 @@ require __DIR__ . '/app/autoload.php';
 
 // $apiKey = $_ENV['API_KEY'] ?? null;
 
-$getFeatures= $database->prepare('SELECT * FROM features WHERE active = 1;');
+// Get active features for booking form
+$getFeatures = $database->prepare('SELECT * FROM features WHERE active = 1;');
 $getFeatures->execute();
-$features= $getFeatures->fetchAll(PDO::FETCH_ASSOC);
+$features = $getFeatures->fetchAll(PDO::FETCH_ASSOC);
 
 
 require __DIR__ . '/views/header.php';
@@ -38,7 +39,7 @@ require __DIR__ . '/views/header.php';
 
         <label for="features"></label>
         <?php foreach ($features as $feature) {
-            ?><label><input type="checkbox" id="<?=$feature['feature']?>" name="<?=$feature['feature']?>"><?= $feature['feature'] . " (" . $feature['rank'] . ", $" . $feature['price'] . ")" ?></label>
+            ?><label><input type="checkbox" id="<?=$feature['feature']?>" name="features[]" value="<?=$feature['id']?>"><?= $feature['feature'] . " (" . $feature['rank'] . ", $" . $feature['price'] . ")" ?></label>
 
             <?php
         }
