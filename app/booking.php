@@ -18,7 +18,7 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
     $features = [];
 
     foreach ($selectedFeatures as $selected) {
-        $chosenFeature = $database->prepare('SELECT price FROM features WHERE id = :feature');
+        $chosenFeature = $database->prepare('SELECT feature, price FROM features WHERE id = :feature');
         $chosenFeature->bindParam(':feature', $selected, PDO::PARAM_STR);
         $chosenFeature->execute();
         $selectedFeature = $chosenFeature->fetch(PDO::FETCH_ASSOC);
@@ -47,6 +47,10 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
 
     if($departure === "") {
         $errors[] = "Enter your departure date!";
+    }
+
+    if($arrival >= $departure) {
+        $errors[] = "Arrival must be before departure!";
     }
        
     if(!$errors) {
@@ -93,19 +97,80 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
             $errors[] = "There was an error while validating your transfer code.";
         } else {
             $result = json_decode($response, true);
-            if (isset($result['error'])) {
-                $errors[] = $result['error'];
+            if (!isset($result['status']) || $result['status'] !== 'success') {
+                $errors[] = "Transfer code validation failed.";
             } else {
-                // insert into database if the booking is accepted
-                $statement = $database->prepare('INSERT INTO bookings (name, room_number, arrival, departure) VALUES (:name, :roomNumber, :arrival, :departure)');
-                $statement->bindParam(':name', $name, PDO::PARAM_STR);
-                $statement->bindParam(':roomNumber', $roomNumber, PDO::PARAM_STR);
-                $statement->bindParam(':arrival', $arrival, PDO::PARAM_STR);
-                $statement->bindParam(':departure', $departure, PDO::PARAM_STR);
+                // Post reciept to Central bank
+                $featureNames = [];
+                foreach ($features as $feature) {
+                    $featureNames[] = $feature['feature'];
+                }
 
-                $statement->execute();
+                $receiptInfo = [
+                    "user" => "Marie",
+                    "api_key" => $apiKey,
+                    "island_id" => 567,
+                    "guest_name" => $name,
+                    "arrival_date" => $arrival,
+                    "departure_date"=> $departure,
+                    "features_used" => $featureNames,
+                    "star_rating" => 1
+                ];
 
-                echo "Your reservation has been made!";
+                $options = [
+                    "http" => [
+                        "method" => "POST",
+                        "header" => "Content-Type: application/json\r\n",
+                        "content" => json_encode($receiptInfo)
+                    ]
+                ];
+                $receiptContext = stream_context_create($options);
+                $receiptUrl = 'https://www.yrgopelag.se/centralbank/receipt';
+                $receiptResponse = file_get_contents($receiptUrl, false, $receiptContext);
+
+                $receiptResult = json_decode($receiptResponse, true);
+
+                if ($receiptResponse === false) {
+                    $errors[] = "There was an error creating the receipt";
+                } else if (!isset($receiptResult['status']) || $receiptResult['status'] !== 'success') {
+                    $errors[] = $receiptResult['error'] ?? 'Receipt was rejected.';
+                } else {
+                    // insert into database
+                    $statement = $database->prepare('INSERT INTO bookings (name, room_number, arrival, departure) VALUES (:name, :roomNumber, :arrival, :departure)');
+                    $statement->bindParam(':name', $name, PDO::PARAM_STR);
+                    $statement->bindParam(':roomNumber', $roomNumber, PDO::PARAM_STR);
+                    $statement->bindParam(':arrival', $arrival, PDO::PARAM_STR);
+                    $statement->bindParam(':departure', $departure, PDO::PARAM_STR);
+
+                    $statement->execute();
+
+                    $depositData = [
+                        "user" => "Marie",
+                        "transferCode" => $transferCode,
+                    ];
+
+                    $depositOpts = [
+                        "http" => [
+                            "method" => "POST",
+                            "header" => "Content-Type: application/json\r\n",
+                            "content" => json_encode($depositData)
+                        ]
+                    ];
+                    $depositContext = stream_context_create($depositOpts);
+                    $depositUrl = 'https://www.yrgopelag.se/centralbank/deposit';
+                    $depositResponse = file_get_contents($depositUrl, false, $depositContext);
+
+                    $depositResult = json_decode($depositResponse, true);
+
+                    if ($depositResponse === false) {
+                        $errors[] = "There was an error making the deposit";
+                    } else if (!isset($depositResult['status']) || $depositResult['status'] !== 'success') {
+                        $errors[] = $depositResult['error'] ?? 'Could not complete the deposit.';
+                    } else {
+                        header('Location: /confirmation.php');
+                        exit;
+                }
+            }
             }
         }
         } else {
@@ -117,5 +182,3 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
         }
     }
 };
-
-// header('Location: /index.php');
