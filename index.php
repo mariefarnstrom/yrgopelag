@@ -1,11 +1,10 @@
 <?php
-// require __DIR__ . '/vendor/autoload.php';
+session_start();
+
+$errors = $_SESSION['errors'] ?? [];
+unset($_SESSION['errors']);
+
 require __DIR__ . '/app/autoload.php';
-
-// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-// $dotenv->load();
-
-// $apiKey = $_ENV['API_KEY'] ?? null;
 
 // Get active features for booking form
 $getFeatures = $database->prepare('SELECT * FROM features WHERE active = 1;');
@@ -14,6 +13,10 @@ $features = $getFeatures->fetchAll(PDO::FETCH_ASSOC);
 
 
 require __DIR__ . '/views/header.php';
+
+foreach ($errors as $error): ?>
+    <p class="error"><?= htmlspecialchars($error) ?></p>
+<?php endforeach;
 ?>
 
 <main>

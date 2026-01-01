@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+session_start();
 
 require __DIR__ . '/autoload.php';
 
@@ -86,7 +87,8 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
             "http" => [
                 "method" => "POST",
                 "header" => "Content-Type: application/json\r\n",
-                "content" => json_encode($data)
+                "content" => json_encode($data),
+                "ignore_errors" => true
             ]
         ];
         $context = stream_context_create($opts);
@@ -100,7 +102,7 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
             if (!isset($result['status']) || $result['status'] !== 'success') {
                 $errors[] = "Transfer code validation failed.";
             } else {
-                // Post reciept to Central bank
+                // Post receipt to Central bank
                 $featureNames = [];
                 foreach ($features as $feature) {
                     $featureNames[] = $feature['feature'];
@@ -109,7 +111,6 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
                 $receiptInfo = [
                     "user" => "Marie",
                     "api_key" => $apiKey,
-                    "island_id" => 567,
                     "guest_name" => $name,
                     "arrival_date" => $arrival,
                     "departure_date"=> $departure,
@@ -121,7 +122,8 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
                     "http" => [
                         "method" => "POST",
                         "header" => "Content-Type: application/json\r\n",
-                        "content" => json_encode($receiptInfo)
+                        "content" => json_encode($receiptInfo),
+                        "ignore_errors" => true
                     ]
                 ];
                 $receiptContext = stream_context_create($options);
@@ -153,7 +155,8 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
                         "http" => [
                             "method" => "POST",
                             "header" => "Content-Type: application/json\r\n",
-                            "content" => json_encode($depositData)
+                            "content" => json_encode($depositData),
+                            "ignore_errors" => true
                         ]
                     ];
                     $depositContext = stream_context_create($depositOpts);
@@ -167,18 +170,20 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
                     } else if (!isset($depositResult['status']) || $depositResult['status'] !== 'success') {
                         $errors[] = $depositResult['error'] ?? 'Could not complete the deposit.';
                     } else {
-                        header('Location: /confirmation.php');
+                        header('Location: /app/confirmation.php');
                         exit;
                 }
             }
             }
         }
         } else {
-            echo "Sorry. There is no available room of your selected room type for those dates.";
-        }
-    } else {
-        foreach ($errors as $error) {
-            echo $error;
+            $errors[] = "Sorry. There is no available room of your selected room type for those dates.";
         }
     }
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        header('Location: /index.php');
+        exit;
+    }
+
 };
