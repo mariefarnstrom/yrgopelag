@@ -24,6 +24,7 @@ foreach ($errors as $error): ?>
     <div class="hero">
         <img src="assets/images/hotel_image.png" alt="View of Outset island with the hotel in the foreground.">
     </div>
+    <!-- Section for room types display -->
     <section class="roomTypes">
         <article>
             <div class="calendarContainer">
@@ -50,6 +51,8 @@ foreach ($errors as $error): ?>
             </div>
         </article>
     </section>
+
+    <!-- Booking form -->
     <form class="bookingForm" action="app/booking.php" method="post">
         <label for="name">Name</label>
         <input type="text" id="name" name="name">
