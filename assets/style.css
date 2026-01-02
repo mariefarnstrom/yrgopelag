@@ -1,3 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
+.hero {
+    width:100%;
+    height: 100vh;
+}
+
+.hero img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.roomTypes article {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.calendarContainer {
+    justify-content: center;
+}
+
+.roomTypeImage {
+    width: 40%;
+    height: auto;
+    margin: 1rem;
+}
+
+.roomTypeImage img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
 .bookingForm {
     width: 25vw;
     display: flex;

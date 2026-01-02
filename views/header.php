@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Outset Shores Hotel</title>
     <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/calendar.css">
 </head>
 <body>
     
