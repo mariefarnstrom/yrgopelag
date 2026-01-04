@@ -4,7 +4,6 @@ session_start();
 
 require __DIR__ . '/autoload.php';
 
-// $database = new PDO('sqlite:' . __DIR__ . '/../hotel.db');
 $errors = [];
 
 if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['departure'], $_POST['roomType'])) {
@@ -19,7 +18,7 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
     $features = [];
 
     foreach ($selectedFeatures as $selected) {
-        $chosenFeature = $database->prepare('SELECT feature, price FROM features WHERE id = :feature');
+        $chosenFeature = $featuresDatabase->prepare('SELECT feature, price FROM features WHERE id = :feature');
         $chosenFeature->bindParam(':feature', $selected, PDO::PARAM_STR);
         $chosenFeature->execute();
         $selectedFeature = $chosenFeature->fetch(PDO::FETCH_ASSOC);

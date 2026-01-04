@@ -10,3 +10,4 @@ $dotenv->load();
 $apiKey = $_ENV['API_KEY'] ?? null;
 
 $database = new PDO('sqlite:' . __DIR__ . '/../hotel.db');
+$featuresDatabase = new PDO('sqlite:' . __DIR__ . '/../features.db');

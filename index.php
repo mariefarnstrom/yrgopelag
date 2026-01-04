@@ -17,9 +17,16 @@ $availableStandard = getAvailableDates($database, 'standard', $month, $year);
 $availableLuxury = getAvailableDates($database, 'luxury', $month, $year);
 
 // Get active features for booking form
-$getFeatures = $database->prepare('SELECT * FROM features WHERE active = 1;');
+$getFeatures = $featuresDatabase->prepare('SELECT * FROM features WHERE active = 1;');
 $getFeatures->execute();
 $features = $getFeatures->fetchAll(PDO::FETCH_ASSOC);
+
+$featureCategories = [];
+
+foreach ($features as $feature) {
+    $category = $feature['category'];
+    $featureCategories[$category][] = $feature;
+}
 
 
 require __DIR__ . '/views/header.php';
@@ -106,10 +113,16 @@ foreach ($errors as $error): ?>
         </select>
 
         <label for="features"></label>
-        <?php foreach ($features as $feature) {
-            ?><label><input type="checkbox" id="<?=$feature['feature']?>" name="features[]" value="<?=$feature['id']?>"><?= $feature['feature'] . " (" . $feature['rank'] . ", $" . $feature['price'] . ")" ?></label>
+        <?php foreach ($featureCategories as $category => $f) { ?>
+            <h3><?= htmlspecialchars(ucfirst($category)) ?></h3>
 
+            <?php foreach ($f as $feature) { ?>
+                <label>
+                    <input type="checkbox" id="<?= htmlspecialchars($feature['feature']) ?>" name="features[]" value="<?= $feature['id'] ?>">
+                    <?= htmlspecialchars($feature['feature']) ?> (<?= htmlspecialchars($feature['rank']) ?>, $<?= htmlspecialchars($feature['price']) ?>)
+                </label><br>
             <?php
+            }
         }
         ?>
         <input type="submit" value="Submit">
