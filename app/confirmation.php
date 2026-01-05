@@ -1,14 +1,24 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['confirmation'])) {
+    echo "No booking data available.";
+    exit;
+}
+$booking = $_SESSION['confirmation'];
+// unset($_SESSION['confirmation']);
+
+require __DIR__ . '/../views/header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>Your reservation has been made!</h2>
-</body>
-</html>
+<nav class="confirmationNav"><a href="../index.php">Home</a></nav>
+<article class="confirmationMessage">
+    <h2>Thankyou, <?= $booking['guest_name'] ?>! Your reservation has been made.</h2>
+
+    <p><?= ucfirst($booking['room_type']) ?> room</p>
+    <p>Check-in: <?= $booking['arrival'] ?> <strong>3 pm</strong></p>
+    <p>Check-out: <?= $booking['departure'] ?> <strong>11 am</strong></p>
+    <p>Total price: <?= $booking['total_price'] ?>$</p>
+</article>
+
+<?php
+require __DIR__ . '/../views/footer.php';

@@ -27,7 +27,7 @@
 /* Available dates */
 .available {
   background: #f7efda;
-  border-color: #7b4002;
+  border: 1.3px solid #7b4002;
   color: #b26229;
   font-weight: 600;
 }
@@ -40,7 +40,6 @@
 /* Weekends */
 .weekend {
   /* background: #fbe9e7; */
-  color: #a91313;
   font-weight: 500;
-  border: 2px solid rgb(169, 15, 15);
+  border: 2.5px solid rgb(169, 15, 15);
 }

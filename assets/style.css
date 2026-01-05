@@ -1,5 +1,14 @@
+:root {
+    --mainFont: "Raleway";
+}
+
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Raleway";
+}
+
+body {
+    background-color: rgb(246, 246, 238);
 }
 
 .hero {
@@ -11,6 +20,7 @@
     position: absolute;
     left: 10vw;
     top: 7vw;
+    font-size: 4.5rem;
     color: white;
 }
 
@@ -50,7 +60,54 @@
 }
 
 .bookingForm {
-    width: 25vw;
+    display: flex;
+}
+
+.formFeatures {
+    width: 35%;
+    padding: 1rem;
+}
+
+.formInputs {
     display: flex;
     flex-direction: column;
+    width: 30%;
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+.formInputs input, .formInputs select {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.submitButton {
+    margin: 1rem;
+    height: 2rem;
+    border-radius: 10px;
+}
+
+.submitButton:hover {
+    transform: scale(1.05);
+}
+
+/* confirmation.php */
+.confirmationNav {
+    width: 100%;
+    background-color: rgb(200, 202, 200);
+    display: flex;
+    align-items: center;
+}
+
+.confirmationNav a {
+    font-size: 1.5rem;
+    margin: 0.7rem;
+}
+
+.confirmationMessage {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 3rem;
 }

@@ -92,41 +92,44 @@ foreach ($errors as $error): ?>
     </section>
 
     <!-- Booking form -->
+    <h2>Make your reservation for a relaxing holiday here</h2>
     <form class="bookingForm" action="app/booking.php" method="post">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name">
+        <div class="formFeatures">
+            <label for="features">Additional features</label>
+            <?php foreach ($featureCategories as $category => $f) { ?>
+                <h3><?= htmlspecialchars(ucfirst($category)) ?></h3>
 
-        <label for="transferCode">Transfer code</label>
-        <input type="text" id="transferCode" name="transferCode">
-
-        <label for="arrival">Arrival</label>
-        <input type="date" id="arrival" name="arrival" min="2026-01-01" max="2026-01-31">
-
-        <label for="departure">Departure</label>
-        <input type="date" id="departure" name="departure" min="2026-01-01" max="2026-01-31">
-       
-        <label for="roomType">Room type</label>
-        <select id="roomType" name="roomType">
-            <option value="economy">Economy</option>
-            <option value="standard">Standard</option>
-            <option value="luxury">Luxury</option>
-        </select>
-
-        <label for="features"></label>
-        <?php foreach ($featureCategories as $category => $f) { ?>
-            <h3><?= htmlspecialchars(ucfirst($category)) ?></h3>
-
-            <?php foreach ($f as $feature) { ?>
-                <label>
-                    <input type="checkbox" id="<?= htmlspecialchars($feature['feature']) ?>" name="features[]" value="<?= $feature['id'] ?>">
-                    <?= htmlspecialchars($feature['feature']) ?> (<?= htmlspecialchars($feature['rank']) ?>, $<?= htmlspecialchars($feature['price']) ?>)
-                </label><br>
-            <?php
+                <?php foreach ($f as $feature) { ?>
+                    <label>
+                        <input type="checkbox" id="<?= htmlspecialchars($feature['feature']) ?>" name="features[]" value="<?= $feature['id'] ?>">
+                        <?= htmlspecialchars(ucfirst($feature['feature'])) ?> (<?= htmlspecialchars($feature['rank']) ?>, $<?= htmlspecialchars($feature['price']) ?>)
+                    </label><br>
+                <?php
+                }
             }
-        }
-        ?>
-        <input type="submit" value="Submit">
+            ?>
+        </div>   
+        <div class="formInputs">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+
+            <label for="transferCode">Transfer code:</label>
+            <input type="text" id="transferCode" name="transferCode">
+
+            <label for="arrival">Arrival:</label>
+            <input type="date" id="arrival" name="arrival" min="2026-01-01" max="2026-01-31">
+
+            <label for="departure">Departure:</label>
+            <input type="date" id="departure" name="departure" min="2026-01-01" max="2026-01-31">
         
+            <label for="roomType">Room type:</label>
+            <select id="roomType" name="roomType">
+                <option value="economy">Economy</option>
+                <option value="standard">Standard</option>
+                <option value="luxury">Luxury</option>
+            </select>
+            <input class="submitButton" type="submit" value="Make reservation">
+        </div>
     </form>
     
 </main>

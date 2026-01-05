@@ -169,6 +169,14 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
                     } else if (!isset($depositResult['status']) || $depositResult['status'] !== 'success') {
                         $errors[] = $depositResult['error'] ?? 'Could not complete the deposit.';
                     } else {
+                        $_SESSION['confirmation'] = [
+                            'guest_name' => $name,
+                            'arrival' => $arrival,
+                            'departure' => $departure,
+                            'room_type' => $roomType,
+                            'features' => $featureNames,
+                            'total_price' => $totalPrice
+                        ];
                         header('Location: confirmation.php');
                         exit;
                 }
