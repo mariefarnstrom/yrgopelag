@@ -7,6 +7,10 @@ unset($_SESSION['errors']);
 require __DIR__ . '/app/autoload.php';
 require __DIR__ . '/app/functions.php';
 
+$stmt = $database->query("SELECT room_type, price FROM rooms GROUP BY room_type");
+
+$roomPrices = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
 $year = 2026;
 $month = 1;
 $monthName = date('F', mktime(0, 0, 0, $month, 1, $year));
@@ -50,7 +54,7 @@ require __DIR__ . '/views/header.php';
                     <?= getCalendar($availableEconomy); ?>
                 </div>
                 <div class="roomDescription">
-                    <h2>Economy</h2>
+                    <h2>Economy $<?= $roomPrices['economy'] ?></h2>
                     <p>Our Economy Rooms offer a warm, inviting retreat designed for travelers who value simplicity and connection to nature. Crafted entirely from natural wood, these rooms are filled with soft daylight and open onto peaceful views of palm trees, the beach, or the sea beyond. Thoughtfully furnished with handcrafted pieces and calming neutral tones, they provide everything you need for a restful stay—perfect for guests who plan to spend their days exploring the shore and their nights unwinding in quiet comfort.
                     </p>
                 </div>
@@ -64,7 +68,7 @@ require __DIR__ . '/views/header.php';
                     <?= getCalendar($availableStandard); ?>
                 </div>
                 <div class="roomDescription">
-                    <h2>Standard</h2>
+                    <h2>Standard $<?= $roomPrices['standard'] ?></h2>
                     <p>The Standard Rooms elevate your stay with more space, refined details, and a tranquil indoor-outdoor flow. Featuring a comfortable seating or work area and large doors that open onto a private balcony, these rooms invite the tropical landscape inside. Gentle ocean breezes, warm wood textures, and soft lighting create an atmosphere that feels both relaxed and elegant—ideal for longer stays or guests seeking a balance of comfort and style.
                     </p>
                 </div>
@@ -78,7 +82,7 @@ require __DIR__ . '/views/header.php';
                     <?= getCalendar($availableLuxury); ?>
                 </div>
                 <div class="roomDescription">
-                    <h2>Luxury</h2>
+                    <h2>Luxury $<?= $roomPrices['luxury'] ?></h2>
                     <p>Our Luxury Rooms are the most exclusive expression of the villa, designed for guests seeking privacy, romance, and breathtaking views. Centered around a spacious four-poster bed, these rooms open directly onto a private terrace with uninterrupted ocean scenery and an intimate plunge pool. High ceilings, handcrafted furnishings, and carefully curated details create a sense of effortless indulgence. Whether watching the sunrise over the water or enjoying a quiet evening indoors, the Luxury Room offers a truly unforgettable escape.
                     </p>
                 </div>
