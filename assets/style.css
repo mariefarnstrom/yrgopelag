@@ -1,14 +1,25 @@
 :root {
     --mainFont: "Raleway";
+    --textColor: #5a3003;
+    --primaryColor: rgb(246, 246, 238);
 }
 
 * {
     box-sizing: border-box;
     font-family: "Raleway";
+    color: var(--textColor);
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+p, label {
+    font-size: 1.3rem;
 }
 
 body {
-    background-color: rgb(246, 246, 238);
+    background-color: var(--primaryColor);
 }
 
 .hero {
@@ -19,9 +30,15 @@ body {
 .hotelName {
     position: absolute;
     left: 10vw;
-    top: 7vw;
+    top: 6vw;
     font-size: 4.5rem;
-    color: white;
+    color: var(--primaryColor);
+    line-height: 3.5rem;
+}
+
+.hotelName span {
+    color: var(--primaryColor);
+    font-size: 3rem;
 }
 
 .hero img {
@@ -30,17 +47,40 @@ body {
     object-fit: cover;
 }
 
+.mainPage {
+    margin: 2rem;
+}
+
+.welcomeMessage {
+    margin: 4rem 20rem 4rem 20rem;
+}
+
+.welcome {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.roomsHeading {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+    border-bottom: solid 3px #5a3003;
+}
+
 .roomTypes article {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 2rem;
 }
 
 .calendarContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+}
+
+.calendarContainer h3 {
+    margin-top: 2.5rem;
 }
 
 .roomDescription {
@@ -55,8 +95,13 @@ body {
 
 .roomTypeImage img {
     width: 100%;
-    height: 100%;
+    height: auto;
     border-radius: 10px;
+}
+
+.reservationHeading {
+    padding-top: 1rem;
+    border-top: solid 3px var(--textColor);
 }
 
 .bookingForm {
@@ -66,6 +111,15 @@ body {
 .formFeatures {
     width: 35%;
     padding: 1rem;
+}
+
+.formFeatures h3 {
+    margin-bottom: 0.2rem;
+}
+
+.featuresHeading {
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .formInputs {
@@ -85,10 +139,19 @@ body {
     margin: 1rem;
     height: 2rem;
     border-radius: 10px;
+    border-color: var(--textColor);
 }
 
 .submitButton:hover {
     transform: scale(1.05);
+}
+
+#formErrors {
+    padding: 1.5rem;
+}
+
+.error {
+    color: crimson;
 }
 
 /* confirmation.php */

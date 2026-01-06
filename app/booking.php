@@ -189,7 +189,7 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
     }
     if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
-        header('Location: ../index.php');
+        header('Location: ../index.php#formErrors');
         exit;
     }
 
