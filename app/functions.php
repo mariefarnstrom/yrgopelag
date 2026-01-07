@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/autoload.php';
 
+// function to get available dates for calendars
 function getAvailableDates(PDO $db, string $roomType, int $month, int $year): array {
     $availableDays = [];
     $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
@@ -38,6 +39,7 @@ function getAvailableDates(PDO $db, string $roomType, int $month, int $year): ar
     return $availableDays;
 }
 
+// Function to create availability calendar
 function getCalendar(array $available = [], ?int $month = null, ?int $year = null, bool $weekStartsMonday = true): string
 {
     if ($month === null) $month = (int)date('n');
@@ -61,4 +63,23 @@ function getCalendar(array $available = [], ?int $month = null, ?int $year = nul
     endfor;
     $html .= '</section>';
     return $html;
+}
+
+// function for posting json to the bank
+function postJson(string $url, array $data): array|false {
+    $opts = [
+        "http" => [
+            "method" => "POST",
+            "header" => "Content-Type: application/json\r\n",
+            "content" => json_encode($data),
+            "ignore_errors" => true
+        ]
+    ];
+    $context = stream_context_create($opts);
+    $response = file_get_contents($url, false, $context);
+    if ($response === false) {
+        return false;
+    }
+
+    return json_decode($response, true);
 }

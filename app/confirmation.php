@@ -11,17 +11,19 @@ $booking = $_SESSION['confirmation'];
 require __DIR__ . '/../views/header.php';
 ?>
 <nav class="confirmationNav"><a href="../index.php">Home</a></nav>
+<!-- Show confirmation message with booking details -->
 <article class="confirmationMessage">
-    <h2>Thank you, <?= $booking['guest_name'] ?>! Your reservation has been made.</h2>
+    <h2>Thank you, <?= htmlspecialchars($booking['guest_name']) ?>! Your reservation has been made.</h2>
 
-    <p><?= ucfirst($booking['room_type']) ?> room</p>
-    <p>Check-in: <?= $booking['arrival'] ?> <strong>3 pm</strong></p>
-    <p>Check-out: <?= $booking['departure'] ?> <strong>11 am</strong></p>
-    <p>Additional features booked: <?php foreach ($booking['features'] as $feature) {
-        echo " " . $feature;
-    } ?>.
-    </p>
-    <p>Total price: <?= $booking['total_price'] ?>$</p>
+    <p><?= ucfirst(htmlspecialchars($booking['room_type'])) ?> room</p>
+    <p>Check-in: <?= htmlspecialchars($booking['arrival']) ?> <strong>3 pm</strong></p>
+    <p>Check-out: <?= htmlspecialchars($booking['departure']) ?> <strong>11 am</strong></p>
+    <?php if(!empty($booking['features'])) { ?>
+        <p>Additional features booked:
+        <?php echo htmlspecialchars(implode(', ', $booking['features'])); ?>.
+        </p>
+    <?php } ?>
+    <p>Total price: <strong><?= htmlspecialchars($booking['total_price']) ?>$</strong></p>
 </article>
 
 <?php

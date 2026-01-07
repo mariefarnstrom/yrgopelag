@@ -3,6 +3,7 @@ declare(strict_types=1);
 session_start();
 
 require __DIR__ . '/autoload.php';
+require __DIR__ . '/functions.php';
 
 $errors = [];
 
@@ -63,134 +64,100 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
 
         $availabilityCheck->execute();
         $room = $availabilityCheck->fetch(PDO::FETCH_ASSOC);
-        if($room) {
-        $roomNumber = $room['room_number'];
-
-        // Total price calculation
-        $arrivalDate = new DateTime($arrival);
-        $departureDate = new DateTime($departure);
-        $nights = $arrivalDate->diff($departureDate)->days;
-        $pricePerNight = $room['price'];
-        $totalRoomPrice = $nights * $pricePerNight;
-
-        // Total price for hotel nights and chosen features
-        $totalPrice = $totalRoomPrice + $featuresTotal;
-
-        // Validate transfer code
-        $data = [
-            "transferCode" => $transferCode,
-            "totalCost" => $totalPrice
-        ];
-
-        $opts = [
-            "http" => [
-                "method" => "POST",
-                "header" => "Content-Type: application/json\r\n",
-                "content" => json_encode($data),
-                "ignore_errors" => true
-            ]
-        ];
-        $context = stream_context_create($opts);
-        $url = 'https://www.yrgopelag.se/centralbank/transferCode';
-        $response = file_get_contents($url, false, $context);
-
-        if ($response === false) {
-            $errors[] = "There was an error while validating your transfer code.";
-        } else {
-            $result = json_decode($response, true);
-            if (!isset($result['status']) || $result['status'] !== 'success') {
-                $errors[] = "Transfer code validation failed.";
-            } else {
-                // Post receipt to Central bank
-                $featureNames = [];
-                foreach ($features as $feature) {
-                    $featureNames[] = $feature['feature'];
-                }
-
-                $receiptInfo = [
-                    "user" => "Marie",
-                    "api_key" => $apiKey,
-                    "guest_name" => $name,
-                    "arrival_date" => $arrival,
-                    "departure_date"=> $departure,
-                    "features_used" => $featureNames,
-                    "star_rating" => 1
-                ];
-
-                $options = [
-                    "http" => [
-                        "method" => "POST",
-                        "header" => "Content-Type: application/json\r\n",
-                        "content" => json_encode($receiptInfo),
-                        "ignore_errors" => true
-                    ]
-                ];
-                $receiptContext = stream_context_create($options);
-                $receiptUrl = 'https://www.yrgopelag.se/centralbank/receipt';
-                $receiptResponse = file_get_contents($receiptUrl, false, $receiptContext);
-
-                $receiptResult = json_decode($receiptResponse, true);
-
-                if ($receiptResponse === false) {
-                    $errors[] = "There was an error creating the receipt";
-                } else if (!isset($receiptResult['status']) || $receiptResult['status'] !== 'success') {
-                    $errors[] = $receiptResult['error'] ?? 'Receipt was rejected.';
-                } else {
-                    // insert into database
-                    $statement = $database->prepare('INSERT INTO bookings (name, room_number, arrival, departure) VALUES (:name, :roomNumber, :arrival, :departure)');
-                    $statement->bindParam(':name', $name, PDO::PARAM_STR);
-                    $statement->bindParam(':roomNumber', $roomNumber, PDO::PARAM_STR);
-                    $statement->bindParam(':arrival', $arrival, PDO::PARAM_STR);
-                    $statement->bindParam(':departure', $departure, PDO::PARAM_STR);
-
-                    $statement->execute();
-
-                    $depositData = [
-                        "user" => "Marie",
-                        "transferCode" => $transferCode,
-                    ];
-
-                    $depositOpts = [
-                        "http" => [
-                            "method" => "POST",
-                            "header" => "Content-Type: application/json\r\n",
-                            "content" => json_encode($depositData),
-                            "ignore_errors" => true
-                        ]
-                    ];
-                    $depositContext = stream_context_create($depositOpts);
-                    $depositUrl = 'https://www.yrgopelag.se/centralbank/deposit';
-                    $depositResponse = file_get_contents($depositUrl, false, $depositContext);
-
-                    $depositResult = json_decode($depositResponse, true);
-
-                    if ($depositResponse === false) {
-                        $errors[] = "There was an error making the deposit";
-                    } else if (!isset($depositResult['status']) || $depositResult['status'] !== 'success') {
-                        $errors[] = $depositResult['error'] ?? 'Could not complete the deposit.';
-                    } else {
-                        $_SESSION['confirmation'] = [
-                            'guest_name' => $name,
-                            'arrival' => $arrival,
-                            'departure' => $departure,
-                            'room_type' => $roomType,
-                            'features' => $featureNames,
-                            'total_price' => $totalPrice
-                        ];
-                        header('Location: confirmation.php');
-                        exit;
-                }
-            }
-            }
-        }
-        } else {
+        if(!$room) {
             $errors[] = "Sorry. There is no available room of your selected room type for those dates.";
-        }
+        } else {
+
+            $roomNumber = $room['room_number'];
+
+            // Total price calculation
+            $arrivalDate = new DateTime($arrival);
+            $departureDate = new DateTime($departure);
+            $nights = $arrivalDate->diff($departureDate)->days;
+            $pricePerNight = $room['price'];
+            $totalRoomPrice = $nights * $pricePerNight;
+
+            // Total price for hotel nights and chosen features
+            $totalPrice = $totalRoomPrice + $featuresTotal;
+
+            // Validate transfer code
+            $validationData = [
+                "transferCode" => $transferCode,
+                "totalCost" => $totalPrice
+            ];
+
+            $validationResult = postJson('https://www.yrgopelag.se/centralbank/transferCode', $validationData);
+
+            if ($validationResult === false) {
+                $errors[] = "There was an error while validating your transfer code.";
+            } else if (!isset($validationResult['status']) || $validationResult['status'] !== 'success') {
+                    $errors[] = "Transfer code validation failed.";
+                } else {
+                    // Post receipt to Central bank
+                    $featureNames = [];
+                    foreach ($features as $feature) {
+                        $featureNames[] = $feature['feature'];
+                    }
+
+                    $receiptInfo = [
+                        "user" => "Marie",
+                        "api_key" => $apiKey,
+                        "guest_name" => $name,
+                        "arrival_date" => $arrival,
+                        "departure_date"=> $departure,
+                        "features_used" => $featureNames,
+                        "star_rating" => 1
+                    ];
+
+                    $receiptResult = postJson('https://www.yrgopelag.se/centralbank/receipt', $receiptInfo);
+
+                    if ($receiptResult === false) {
+                        $errors[] = "There was an error creating the receipt";
+                    } else if (!isset($receiptResult['status']) || $receiptResult['status'] !== 'success') {
+                        $errors[] = $receiptResult['error'] ?? 'Receipt was rejected.';
+                    } else {
+                        // insert into database
+                        $statement = $database->prepare('INSERT INTO bookings (name, room_number, arrival, departure) VALUES (:name, :roomNumber, :arrival, :departure)');
+                        $statement->bindParam(':name', $name, PDO::PARAM_STR);
+                        $statement->bindParam(':roomNumber', $roomNumber, PDO::PARAM_STR);
+                        $statement->bindParam(':arrival', $arrival, PDO::PARAM_STR);
+                        $statement->bindParam(':departure', $departure, PDO::PARAM_STR);
+
+                        $statement->execute();
+
+                        $depositData = [
+                            "user" => "Marie",
+                            "transferCode" => $transferCode,
+                        ];
+                        
+                        $depositResult = postJson('https://www.yrgopelag.se/centralbank/deposit', $depositData);
+
+                        if ($depositResult === false) {
+                            $errors[] = "There was an error making the deposit";
+                        } else if (!isset($depositResult['status']) || $depositResult['status'] !== 'success') {
+                            $errors[] = $depositResult['error'] ?? 'Could not complete the deposit.';
+                        } else {
+                            // redirect to confirmation.php if the booking is confirmed
+                            $_SESSION['confirmation'] = [
+                                'guest_name' => $name,
+                                'arrival' => $arrival,
+                                'departure' => $departure,
+                                'room_type' => $roomType,
+                                'features' => $featureNames,
+                                'total_price' => $totalPrice
+                            ];
+                            header('Location: confirmation.php');
+                            exit;
+                        }
+                    }
+                }
+            
+            }
+        } 
     }
+    // If there are errors redirect back to index.php
     if (!empty($errors)) {
         $_SESSION['errors'] = $errors;
         header('Location: ../index.php#formErrors');
         exit;
     }
-
-};

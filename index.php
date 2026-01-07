@@ -7,6 +7,7 @@ unset($_SESSION['errors']);
 require __DIR__ . '/app/autoload.php';
 require __DIR__ . '/app/functions.php';
 
+// Get room prices to show in rooms section
 $stmt = $database->query("SELECT room_type, price FROM rooms GROUP BY room_type");
 
 $roomPrices = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -132,10 +133,10 @@ require __DIR__ . '/views/header.php';
                 <input class="submitButton" type="submit" value="Make reservation">
             </div>
             <div id="formErrors">
-                <?php foreach ($errors as $error): ?>
+                <?php foreach ($errors as $error) { ?>
                     <p class="error"><?= htmlspecialchars($error) ?></p>
-                <?php endforeach;
-                ?>
+                <?php
+                } ?>
             </div>
         </form>
     </section>

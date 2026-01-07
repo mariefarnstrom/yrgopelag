@@ -167,6 +167,10 @@ body {
     margin: 0.7rem;
 }
 
+.confirmationNav a:hover {
+    color: var(--primaryColor);
+}
+
 .confirmationMessage {
     height: 100vh;
     display: flex;
