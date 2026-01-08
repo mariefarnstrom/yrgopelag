@@ -2,6 +2,7 @@
     --mainFont: "Raleway";
     --textColor: #5a3003;
     --primaryColor: rgb(246, 246, 238);
+    --errorColor: crimson;
 }
 
 * {
@@ -31,6 +32,9 @@ body {
     position: absolute;
     left: 10vw;
     top: 6vw;
+    font-family: "DM Serif Display";
+    font-style: italic;
+    font-weight: 300;
     font-size: 4.5rem;
     color: var(--primaryColor);
     line-height: 3.5rem;
@@ -63,7 +67,7 @@ body {
 .roomsHeading {
     font-size: 2.5rem;
     margin-bottom: 0;
-    border-bottom: solid 3px #5a3003;
+    border-bottom: solid 3px var(--textColor);
 }
 
 .roomTypes article {
@@ -151,7 +155,7 @@ body {
 }
 
 .error {
-    color: crimson;
+    color: var(--errorColor);
 }
 
 /* confirmation.php */
