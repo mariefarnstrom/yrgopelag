@@ -44,7 +44,7 @@ require __DIR__ . '/views/header.php';
         <img src="assets/images/hotel_image.png" alt="View of Outset island with the hotel in the foreground.">
     </div>
     <section class="mainPage">
-        <p class="welcomeMessage"><span class="welcome">Welcome</span> to a secluded tropical retreat where time slows and nature takes the lead. Nestled between lush green hills and the gentle curve of a golden beach, our handcrafted wooden villas offer an intimate escape right at the water’s edge. Wake to the sound of the ocean, spend your days beneath swaying palms and turquoise skies, and unwind in serene comfort as the sun sets over the bay. Here, barefoot luxury meets unspoiled beauty—an invitation to disconnect, breathe deeply, and truly arrive.</p>
+        <p class="welcomeMessage"><span class="welcome">Welcome</span> to a secluded tropical retreat where time slows and nature takes the lead. Nestled between lush green hills and the gentle curve of a golden beach, our intimate hotel offers a peaceful escape just steps from the water’s edge. Wake to the sound of the ocean, spend your days beneath swaying palms and turquoise skies, and return to serene, thoughtfully designed rooms as the sun sets over the bay. Here, barefoot comfort meets unspoiled beauty—an invitation to disconnect, breathe deeply, and truly arrive.</p>
 
         <!-- Section for room types display -->
         <section class="roomTypes">
@@ -56,7 +56,7 @@ require __DIR__ . '/views/header.php';
                 </div>
                 <div class="roomDescription">
                     <h2>Economy $<?= $roomPrices['economy'] ?></h2>
-                    <p>Our Economy Rooms offer a warm, inviting retreat designed for travelers who value simplicity and connection to nature. Crafted entirely from natural wood, these rooms are filled with soft daylight and open onto peaceful views of palm trees, the beach, or the sea beyond. Thoughtfully furnished with handcrafted pieces and calming neutral tones, they provide everything you need for a restful stay—perfect for guests who plan to spend their days exploring the shore and their nights unwinding in quiet comfort.
+                    <p>Our Economy Rooms offer a warm and inviting retreat for guests who value simplicity and a close connection to nature. Built from natural wood and filled with soft daylight, they provide peaceful views and all the essentials for a comfortable stay—ideal for travelers who spend their days exploring and their evenings unwinding in calm surroundings.
                     </p>
                 </div>
                 <div class="roomTypeImage">
@@ -70,7 +70,7 @@ require __DIR__ . '/views/header.php';
                 </div>
                 <div class="roomDescription">
                     <h2>Standard $<?= $roomPrices['standard'] ?></h2>
-                    <p>The Standard Rooms elevate your stay with more space, refined details, and a tranquil indoor-outdoor flow. Featuring a comfortable seating or work area and large doors that open onto a private balcony, these rooms invite the tropical landscape inside. Gentle ocean breezes, warm wood textures, and soft lighting create an atmosphere that feels both relaxed and elegant—ideal for longer stays or guests seeking a balance of comfort and style.
+                    <p>The Standard Rooms offer more space and comfort with refined details and a relaxed atmosphere. A seating or work area and doors opening to a private balcony let in natural light and ocean breezes, creating a calm and stylish setting—ideal for longer stays or guests seeking extra comfort.
                     </p>
                 </div>
                 <div class="roomTypeImage">
@@ -84,7 +84,7 @@ require __DIR__ . '/views/header.php';
                 </div>
                 <div class="roomDescription">
                     <h2>Luxury $<?= $roomPrices['luxury'] ?></h2>
-                    <p>Our Luxury Rooms are the most exclusive expression of the villa, designed for guests seeking privacy, romance, and breathtaking views. Centered around a spacious four-poster bed, these rooms open directly onto a private terrace with uninterrupted ocean scenery and an intimate plunge pool. High ceilings, handcrafted furnishings, and carefully curated details create a sense of effortless indulgence. Whether watching the sunrise over the water or enjoying a quiet evening indoors, the Luxury Room offers a truly unforgettable escape.
+                    <p>The Luxury Rooms offer the highest level of comfort and privacy, with stunning ocean views. Featuring a spacious bed, high ceilings, and a luxurious en suite bathroom, these rooms open onto a private terrace with a plunge pool. Designed for relaxation and indulgence, they provide an exclusive and memorable stay.
                     </p>
                 </div>
                 <div class="roomTypeImage">

@@ -6,7 +6,7 @@ if (!isset($_SESSION['confirmation'])) {
     exit;
 }
 $booking = $_SESSION['confirmation'];
-// unset($_SESSION['confirmation']);
+unset($_SESSION['confirmation']);
 
 require __DIR__ . '/../views/header.php';
 ?>
