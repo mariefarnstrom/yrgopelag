@@ -19,7 +19,7 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
     $features = [];
 
     foreach ($selectedFeatures as $selected) {
-        $chosenFeature = $featuresDatabase->prepare('SELECT feature, price FROM features WHERE id = :feature');
+        $chosenFeature = $database->prepare('SELECT id, feature, price FROM features WHERE id = :feature');
         $chosenFeature->bindParam(':feature', $selected, PDO::PARAM_STR);
         $chosenFeature->execute();
         $selectedFeature = $chosenFeature->fetch(PDO::FETCH_ASSOC);
@@ -124,6 +124,15 @@ if(isset($_POST['name'], $_POST['transferCode'], $_POST['arrival'], $_POST['depa
                         $statement->bindParam(':departure', $departure, PDO::PARAM_STR);
 
                         $statement->execute();
+
+                        $statement = $database->prepare('INSERT INTO bookings_features (booking_id, feature_id) VALUES (:bookingId, :featureId)');
+                        $bookingId = $database->lastInsertId();
+
+                        foreach ($features as $feature) {
+                            $statement->bindParam(':bookingId', $bookingId, PDO::PARAM_STR);
+                            $statement->bindParam(':featureId', $feature['id'], PDO::PARAM_STR);
+                            $statement->execute();
+                        }
 
                         $depositData = [
                             "user" => "Marie",

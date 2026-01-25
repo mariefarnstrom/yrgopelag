@@ -114,6 +114,7 @@ body {
 
 .formFeatures {
     width: 35%;
+    min-width: 31rem;
     padding: 1rem;
 }
 

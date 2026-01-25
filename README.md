@@ -33,7 +33,7 @@ Technologies Used:
 
     PDO for database access
 
-    SQLite databases
+    SQLite database
 
     HTML & CSS
 
@@ -42,25 +42,17 @@ Technologies Used:
     External API (Yrgopelag Central Bank)
 
 
-The project uses two separate SQLite databases:
+Database: hotel.db
 
-    1. Hotel Database
-
-        Contains:
+        Contains tables:
 
         * rooms (room_type, room_number, price)
 
         * bookings (name, room_number, arrival, departure)
 
-        This database is used for: Availability checks, Price calculation, Storing confirmed bookings
-
-    2. Features Database
-
-        Contains:
-
         * features (feature, price, category, rank, active)
 
-        This database allows features to be edited independently without affecting existing bookings.
+        * bookings_features (booking_id, feature_id)
 
 
 How to Run the Project:

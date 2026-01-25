@@ -22,7 +22,7 @@ $availableStandard = getAvailableDates($database, 'standard', $month, $year);
 $availableLuxury = getAvailableDates($database, 'luxury', $month, $year);
 
 // Get active features for booking form
-$getFeatures = $featuresDatabase->prepare('SELECT * FROM features WHERE active = 1;');
+$getFeatures = $database->prepare('SELECT * FROM features WHERE active = 1;');
 $getFeatures->execute();
 $features = $getFeatures->fetchAll(PDO::FETCH_ASSOC);
 
