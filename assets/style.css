@@ -153,6 +153,7 @@ body {
 
 #formErrors {
     padding: 1.5rem;
+    max-width: 35%;
 }
 
 .error {
