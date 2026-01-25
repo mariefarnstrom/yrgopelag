@@ -77,3 +77,14 @@ How to Run the Project:
     * Run the project:
 
         Start a local PHP server and open the project in your browser.
+
+
+    * Code review:
+        1. I index.php; Istället för att ha HTML direkt i index.php skulle man kunna ha en egen t ex “main.php” med <main>kod</main>.               Front-end/back-end blir då tydligare.
+        2. I footer.php; Hade kunnat vara mer visuell.
+        3. I header.php; Det ser jättebra ut, man hade flytta class”hero” till header.php
+        4. I functions.php; HTML i php-kod, funkar bra för mindre projekt men blir svårare att underhålla ju mer projektet växer i                  komplexitet. Separera HTML och php.
+        5. I functions.php rad 59; använda lowecase som första bokstav på variabler. $weekday istället för $Weekday, Kan vara lättare att             komma ihåg. 
+        6. I booking.php rad 103; Använda en redan lagrad $_ENV[‘USER’] istället för hårdkodat namn. Lättare att återanvända.
+        7. README.md ser jättebra ut, men hade kunnat innehålla mer info om hur du arbetat med git samt arbetsflöde. 
+    
